@@ -69,7 +69,7 @@ const checkEvent = async (event) => {
   const data = await getData(event.id);
 
   if (!data) {
-    storeData({
+    await storeData(event.id, {
       ...event,
       hasBeenFull: event.participants >= event.total,
     });
