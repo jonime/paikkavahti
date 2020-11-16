@@ -62,7 +62,11 @@ const getData = async (id) => {
 };
 
 const storeData = async (id, data) => {
-  await fs.writeFile(`data/${id}`, JSON.stringify(data, null, 2));
+  try {
+    await fs.writeFile(`data/${id}`, JSON.stringify(data, null, 2));
+  } catch (e) {
+    console.error(`Couldn't write data/${id} file`);
+  }
 };
 
 const checkEvent = async (event) => {
