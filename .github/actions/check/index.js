@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const fs = require('fs').promises;
+const path = require('path');
 
 const MONTHS = {
   TAMMI: 1,
@@ -53,9 +54,11 @@ const getEvents = async () => {
 
 const getData = async (id) => {
   try {
+    console.log('Getting data', path.resolve(`data/${id}`));
     const data = await fs.readFile(`data/${id}`);
     return JSON.parse(data);
   } catch (e) {
+    console.log(`File not found: ${e.message}`);
     return null;
   }
 };

@@ -1,8 +1,11 @@
 name: Check events
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
+  push:
+    branches:
+      - master
+  # schedule:
+  # - cron: '*/15 * * * *'
 
 jobs:
   check-events:
@@ -20,6 +23,5 @@ jobs:
       - uses: EndBug/add-and-commit@v5
         with:
           message: 'Update data'
-          add: 'data/*'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
