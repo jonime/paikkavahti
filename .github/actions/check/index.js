@@ -7,6 +7,7 @@ const core = require('@actions/core');
  * @typedef {object} EventData
  * @property {string} id
  * @property {string} date
+ * @property {string} link
  * @property {number} participants
  * @property {number} total
  */
@@ -118,11 +119,10 @@ const checkEvent = async (event) => {
   const isFull = event.participants >= event.total;
   const hasBeenFull = lastEventData.participants >= lastEventData.participants;
 
-  await sendSlackMessage(
-    'antti on yanar http://www.antti.on.janar/sakposadkpo'
-  );
-
   if (hasBeenFull && !isFull) {
+    await sendSlackMessage(
+      `@joni Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`
+    );
   }
 };
 
