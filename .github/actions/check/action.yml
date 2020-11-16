@@ -3,7 +3,7 @@ description: 'Check hobby league events'
 inputs:
   slack-webhook:
     description: 'Slack webhook URL'
-    required: false
+    required: true
 runs:
   using: 'node12'
   main: 'index.js'

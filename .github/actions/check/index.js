@@ -1,8 +1,19 @@
-const fetch = require('node-fetch');
+const fetch = require('node-fetch').default;
 const cheerio = require('cheerio');
 const fs = require('fs').promises;
-const path = require('path');
+const core = require('@actions/core');
 
+/**
+ * @typedef {object} EventData
+ * @property {string} id
+ * @property {string} date
+ * @property {number} participants
+ * @property {number} total
+ */
+
+/**
+ * @type {Record<string, number>}
+ */
 const MONTHS = {
   TAMMI: 1,
   HELMI: 2,
@@ -36,6 +47,10 @@ const getEvents = async () => {
         .text()
         .match(/Ilmoittautumiset:.*?(\d+) \/ (\d+)/);
 
+      if (!match) {
+        throw new Error('Invalid content');
+      }
+
       const link = $('a', container).prop('href');
       const [, id] = link.match(/\/(\d+)$/);
 
@@ -52,32 +67,62 @@ const getEvents = async () => {
     });
 };
 
-const getData = async (id) => {
+/**
+ * @param {string} id
+ * @returns {Promise<EventData | null>}
+ */
+const getEvent = async (id) => {
   try {
     const data = await fs.readFile(`data/${id}`);
-    return JSON.parse(data);
+    return JSON.parse(data.toString());
   } catch (e) {
     return null;
   }
 };
 
-const storeData = async (id, data) => {
+/**
+ * @param {EventData} event
+ */
+const storeEvent = async (event) => {
   try {
-    await fs.writeFile(`data/${id}`, JSON.stringify(data, null, 2));
+    await fs.writeFile(`data/${event.id}`, JSON.stringify(event, null, 2));
   } catch (e) {
-    console.error(`Couldn't write data/${id} file`);
+    console.error(`Couldn't write data/${event.id} file`);
   }
 };
 
-const checkEvent = async (event) => {
-  const data = await getData(event.id);
+/**
+ * @param {string} text
+ */
+const sendSlackMessage = async (text) => {
+  await fetch(core.getInput('slack-webhook'), {
+    method: 'POST',
+    body: JSON.stringify({
+      text,
+    }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
 
-  if (!data) {
-    await storeData(event.id, {
-      ...event,
-      hasBeenFull: event.participants >= event.total,
-    });
+/**
+ * @param {EventData} event
+ */
+const checkEvent = async (event) => {
+  const lastEventData = await getEvent(event.id);
+  await storeEvent(event);
+
+  if (!lastEventData) {
     return;
+  }
+
+  const isFull = event.participants >= event.total;
+  const hasBeenFull = lastEventData.participants >= lastEventData.participants;
+
+  await sendSlackMessage(
+    'antti on yanar http://www.antti.on.janar/sakposadkpo'
+  );
+
+  if (hasBeenFull && !isFull) {
   }
 };
 

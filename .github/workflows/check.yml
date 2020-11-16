@@ -19,7 +19,7 @@ jobs:
           node-version: '12'
       - uses: ./.github/actions/check
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
       - uses: EndBug/add-and-commit@v5
         with:
           message: 'Update data'
