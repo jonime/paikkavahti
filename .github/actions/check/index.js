@@ -1,5 +1,6 @@
-import fetch from 'node-fetch';
-import cheerio from 'cheerio';
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+const fs = require('fs').promises;
 
 const MONTHS = {
   TAMMI: 1,
@@ -50,4 +51,31 @@ const getEvents = async () => {
     });
 };
 
-getEvents();
+const getData = async (id) => {
+  try {
+    const data = await fs.readFile(`data/${id}`);
+    return JSON.parse(data);
+  } catch (e) {
+    return null;
+  }
+};
+
+const storeData = async (id, data) => {
+  await fs.writeFile(`data/${id}`, JSON.stringify(data, null, 2));
+};
+
+const checkEvent = async (event) => {
+  const data = getData(event.id);
+
+  if (!data) {
+    storeData({
+      ...event,
+      hasBeenFull: event.participants >= event.total,
+    });
+    return;
+  }
+};
+
+(async () => {
+  (await getEvents()).forEach(checkEvent);
+})();

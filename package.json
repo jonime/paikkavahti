@@ -1,11 +1,4 @@
 {
-  "scripts": {
-    "start": "ts-node src/check.ts"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "node-fetch": "^2.6.1"
-  },
   "devDependencies": {
     "prettier": "^2.1.2"
   }

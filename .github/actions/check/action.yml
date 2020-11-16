@@ -1,9 +1,9 @@
 name: 'Check events'
 description: 'Check hobby league events'
 inputs:
-  who-to-greet:
-    description: 'Who to greet'
-    required: true
+  slack-webhook:
+    description: 'Slack webhook URL'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
