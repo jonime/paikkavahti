@@ -1,0 +1,13 @@
+name: Check events
+
+on: [push]
+
+jobs:
+  check-events:
+    name: Check events
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: ./.github/actions/check
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

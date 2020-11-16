@@ -1,0 +1,9 @@
+name: 'Check events'
+description: 'Check hobby league events'
+inputs:
+  who-to-greet:
+    description: 'Who to greet'
+    required: true
+runs:
+  using: 'node12'
+  main: 'index.js'
