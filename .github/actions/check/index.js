@@ -54,11 +54,9 @@ const getEvents = async () => {
 
 const getData = async (id) => {
   try {
-    console.log('Getting data', path.resolve(`data/${id}`));
     const data = await fs.readFile(`data/${id}`);
     return JSON.parse(data);
   } catch (e) {
-    console.log(`File not found: ${e.message}`);
     return null;
   }
 };
@@ -68,7 +66,7 @@ const storeData = async (id, data) => {
 };
 
 const checkEvent = async (event) => {
-  const data = getData(event.id);
+  const data = await getData(event.id);
 
   if (!data) {
     storeData({
