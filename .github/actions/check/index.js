@@ -117,11 +117,11 @@ const checkEvent = async (event) => {
   }
 
   const isFull = event.participants >= event.total;
-  const hasBeenFull = lastEventData.participants >= lastEventData.participants;
+  const hasBeenFull = lastEventData.participants >= lastEventData.total;
 
   if (hasBeenFull && !isFull) {
     await sendSlackMessage(
-      `@joni Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`
+      `<@joni> Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`
     );
   }
 };
