@@ -1,21 +1,17 @@
-const fetch = require('node-fetch').default;
-const cheerio = require('cheerio');
-const fs = require('fs').promises;
-const core = require('@actions/core');
+import fetch from 'node-fetch';
+import cheerio from 'cheerio';
+import { promises as fs } from 'fs';
+import core from '@actions/core';
 
-/**
- * @typedef {object} EventData
- * @property {string} id
- * @property {string} date
- * @property {string} link
- * @property {number} participants
- * @property {number} total
- */
+interface EventData {
+  id: string;
+  date: string;
+  link: string;
+  participants: number;
+  total: number;
+}
 
-/**
- * @type {Record<string, number>}
- */
-const MONTHS = {
+const MONTHS: Record<string, number> = {
   TAMMI: 1,
   HELMI: 2,
   MAALIS: 3,
@@ -68,11 +64,7 @@ const getEvents = async () => {
     });
 };
 
-/**
- * @param {string} id
- * @returns {Promise<EventData | null>}
- */
-const getEvent = async (id) => {
+const getEvent = async (id: string): Promise<EventData | null> => {
   try {
     const data = await fs.readFile(`data/${id}`);
     return JSON.parse(data.toString());
@@ -81,10 +73,7 @@ const getEvent = async (id) => {
   }
 };
 
-/**
- * @param {EventData} event
- */
-const storeEvent = async (event) => {
+const storeEvent = async (event: EventData) => {
   try {
     await fs.writeFile(`data/${event.id}`, JSON.stringify(event, null, 2));
   } catch (e) {
@@ -92,10 +81,7 @@ const storeEvent = async (event) => {
   }
 };
 
-/**
- * @param {string} text
- */
-const sendSlackMessage = async (text) => {
+const sendSlackMessage = async (text: string) => {
   await fetch(core.getInput('slack-webhook'), {
     method: 'POST',
     body: JSON.stringify({
@@ -105,10 +91,7 @@ const sendSlackMessage = async (text) => {
   });
 };
 
-/**
- * @param {EventData} event
- */
-const checkEvent = async (event) => {
+const checkEvent = async (event: EventData) => {
   const lastEventData = await getEvent(event.id);
   await storeEvent(event);
 

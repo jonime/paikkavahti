@@ -3,5 +3,11 @@
     "@actions/core": "^1.2.6",
     "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.5"
+  },
+  "scripts": {
+    "build": "tsc"
   }
 }
