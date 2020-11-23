@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 import { promises as fs } from 'fs';
-import core from '@actions/core';
+import { getInput } from '@actions/core';
 
 interface EventData {
   id: string;
@@ -82,7 +82,7 @@ const storeEvent = async (event: EventData) => {
 };
 
 const sendSlackMessage = async (text: string) => {
-  await fetch(core.getInput('slack-webhook'), {
+  await fetch(getInput('slack-webhook'), {
     method: 'POST',
     body: JSON.stringify({
       text,

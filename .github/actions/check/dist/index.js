@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const fs_1 = require("fs");
-const core_1 = __importDefault(require("@actions/core"));
+const core_1 = require("@actions/core");
 const MONTHS = {
     TAMMI: 1,
     HELMI: 2,
@@ -65,7 +65,7 @@ const storeEvent = async (event) => {
     }
 };
 const sendSlackMessage = async (text) => {
-    await node_fetch_1.default(core_1.default.getInput('slack-webhook'), {
+    await node_fetch_1.default(core_1.getInput('slack-webhook'), {
         method: 'POST',
         body: JSON.stringify({
             text,
