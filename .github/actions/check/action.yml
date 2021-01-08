@@ -1,8 +1,11 @@
 name: 'Check events'
 description: 'Check hobby league events'
 inputs:
-  slack-webhook:
-    description: 'Slack webhook URL'
+  telegram-token:
+    description: 'Telegram Bot Token'
+    required: true
+  telegram-group:
+    description: 'Telegram Group ID'
     required: true
 runs:
   using: 'node12'
