@@ -64,10 +64,11 @@ const storeEvent = async (event) => {
         console.error(`Couldn't write data/${event.id} file`);
     }
 };
-const sendSlackMessage = async (text) => {
-    await node_fetch_1.default(core_1.getInput('slack-webhook'), {
+const sendMessage = async (text) => {
+    await node_fetch_1.default(`https://api.telegram.org/bot${core_1.getInput('telegram-token')}/sendMessage`, {
         method: 'POST',
         body: JSON.stringify({
+            chat_id: core_1.getInput('telegram-group'),
             text,
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -82,7 +83,7 @@ const checkEvent = async (event) => {
     const isFull = event.participants >= event.total;
     const hasBeenFull = lastEventData.participants >= lastEventData.total;
     if (hasBeenFull && !isFull) {
-        await sendSlackMessage(`<@joni> Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`);
+        await sendMessage(`Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`);
     }
 };
 (async () => {

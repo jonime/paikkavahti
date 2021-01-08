@@ -19,7 +19,8 @@ jobs:
           node-version: '12'
       - uses: ./.github/actions/check
         with:
-          slack-webhook: ${{ secrets.SLACK_WEBHOOK }}
+          telegram-token: ${{ secrets.TELEGRAM_TOKEN }}
+          telegram-group: ${{ secrets.TELEGRAM_GROUP }}
       - uses: EndBug/add-and-commit@v5
         with:
           message: 'Update data'

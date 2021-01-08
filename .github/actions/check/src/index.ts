@@ -81,14 +81,18 @@ const storeEvent = async (event: EventData) => {
   }
 };
 
-const sendSlackMessage = async (text: string) => {
-  await fetch(getInput('slack-webhook'), {
-    method: 'POST',
-    body: JSON.stringify({
-      text,
-    }),
-    headers: { 'Content-Type': 'application/json' },
-  });
+const sendMessage = async (text: string) => {
+  await fetch(
+    `https://api.telegram.org/bot${getInput('telegram-token')}/sendMessage`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        chat_id: getInput('telegram-group'),
+        text,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
 };
 
 const checkEvent = async (event: EventData) => {
@@ -103,8 +107,8 @@ const checkEvent = async (event: EventData) => {
   const hasBeenFull = lastEventData.participants >= lastEventData.total;
 
   if (hasBeenFull && !isFull) {
-    await sendSlackMessage(
-      `<@joni> Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`
+    await sendMessage(
+      `Nyt olis tilaa ${event.date} kisaan! (${event.participants}/${event.total}) ${event.link}`
     );
   }
 };
